@@ -32,34 +32,41 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     #Função para adicionar algum item
     def add_item_to_estoque(self):
-        codigo, ok = QInputDialog.getText(self, "Código", "O último digito é referente ao setor\n1 - Limpeza\n2 - Bebidas\n3 - Hortifruti\n4 - Condimentos\n5 - Padaria\n6 - Biscoitos\n7 - Doces\n8 - Açougue\n9 - Congelados\n10 - Frios\n11 - Limpeza\n12 - Higiene\nDigite o código do produto:\n")
+        codigo, ok = QInputDialog.getText(self, "Código", "O último digito é referente ao setor\n01 - Limpeza\n02 - Bebidas\n03 - Hortifruti\n04 - Condimentos\n05 - Padaria\n06 - Biscoitos\n07 - Doces\n08 - Açougue\n09 - Congelados\n10 - Frios\n11 - Limpeza\n12 - Higiene\nDigite o código do produto:\n")
         if ok and codigo.isdigit():
-            ultimo_digito = codigo[-1]
+            if len(codigo) < 2:
+                QMessageBox.warning(self, "Aviso", "O código deve ter pelo menos dois dígitos.")
+                return
 
-            if ultimo_digito == '1':
+            dois_ultimos_digitos = codigo[-2:]
+
+            if dois_ultimos_digitos == '01':
                 setor = "Limpeza"
-            elif ultimo_digito == '2':
+            elif dois_ultimos_digitos == '02':
                 setor = "Bebidas"
-            elif ultimo_digito == '3':
+            elif dois_ultimos_digitos == '03':
                 setor = "Hortifruti"
-            elif ultimo_digito == '4':
+            elif dois_ultimos_digitos == '04':
                 setor = "Condimentos"
-            elif ultimo_digito == '5':
+            elif dois_ultimos_digitos == '05':
                 setor = "Padaria"
-            elif ultimo_digito == '6':
+            elif dois_ultimos_digitos == '06':
                 setor = "Biscoitos"
-            elif ultimo_digito == '7':
+            elif dois_ultimos_digitos == '07':
                 setor = "Doces"
-            elif ultimo_digito == '8':
+            elif dois_ultimos_digitos == '08':
                 setor = "Açougue"
-            elif ultimo_digito == '9':
+            elif dois_ultimos_digitos == '09':
                 setor = "Congelados"
-            elif ultimo_digito == '10':
+            elif dois_ultimos_digitos == '10':
                 setor = "Frios"
-            elif ultimo_digito == '11':
+            elif dois_ultimos_digitos == '11':
                 setor = "Limpeza"
-            elif ultimo_digito == '12':
+            elif dois_ultimos_digitos == '12':
                 setor = "Higiene"
+            else:
+                QMessageBox.warning(self, "Aviso", "Setor não reconhecido.")
+                return
         else:
             QMessageBox.warning(self, "Aviso", "Insira um código válido contendo apenas números.")
             return
