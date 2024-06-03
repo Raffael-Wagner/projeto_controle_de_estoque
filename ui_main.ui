@@ -1,0 +1,643 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>941</width>
+    <height>518</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color:#e8f1f2;</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QFrame" name="frame">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QPushButton" name="btn_inicio">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>35</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton{
+   color: rgb(255, 255, 255);
+   border-radius: 3px;
+   font-size: 16px;
+   background-color:#247BA0;
+}
+
+QPushButton:hover{background-color: rgb(170,255,255); color:black}
+,
+</string>
+         </property>
+         <property name="text">
+          <string>INÍCIO</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btn_estoque">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>35</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton{
+   color: rgb(255, 255, 255);
+   border-radius: 3px;
+   font-size: 16px;
+   background-color:#247BA0;
+}
+
+QPushButton:hover{background-color: rgb(170,255,255); color:black}
+,
+</string>
+         </property>
+         <property name="text">
+          <string>ESTOQUE</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btn_excel">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>35</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton{
+   color: rgb(255, 255, 255);
+   border-radius: 3px;
+   font-size: 16px;
+   background-color:#247BA0;
+}
+
+QPushButton:hover{background-color: rgb(170,255,255); color:black}
+,
+</string>
+         </property>
+         <property name="text">
+          <string>EXCEL</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QStackedWidget" name="Pages">
+      <property name="currentIndex">
+       <number>3</number>
+      </property>
+      <widget class="QWidget" name="pg_table">
+       <layout class="QVBoxLayout" name="verticalLayout_7">
+        <item>
+         <widget class="QTabWidget" name="tabWidget">
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+          <property name="currentIndex">
+           <number>1</number>
+          </property>
+          <widget class="QWidget" name="tables">
+           <attribute name="title">
+            <string>BASE</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_8">
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_2">
+              <item>
+               <layout class="QVBoxLayout" name="verticalLayout_6">
+                <item>
+                 <layout class="QVBoxLayout" name="verticalLayout_5">
+                  <item>
+                   <widget class="QLabel" name="label_3">
+                    <property name="styleSheet">
+                     <string notr="true">background-color: #247ba0;
+color: #fff;</string>
+                    </property>
+                    <property name="text">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;ESTOQUE&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QTreeWidget" name="tw_estoque">
+                    <property name="styleSheet">
+                     <string notr="true">color: black;
+background-color: #E8F1F2;</string>
+                    </property>
+                    <column>
+                     <property name="text">
+                      <string>Código</string>
+                     </property>
+                    </column>
+                    <column>
+                     <property name="text">
+                      <string>Nome</string>
+                     </property>
+                    </column>
+                    <column>
+                     <property name="text">
+                      <string>Validade</string>
+                     </property>
+                    </column>
+                    <column>
+                     <property name="text">
+                      <string>Preço_custo</string>
+                     </property>
+                    </column>
+                    <column>
+                     <property name="text">
+                      <string>Preço_venda</string>
+                     </property>
+                    </column>
+                    <column>
+                     <property name="text">
+                      <string>Quantidade</string>
+                     </property>
+                    </column>
+                    <column>
+                     <property name="text">
+                      <string>Quantidade_min</string>
+                     </property>
+                    </column>
+                    <column>
+                     <property name="text">
+                      <string>Setor</string>
+                     </property>
+                    </column>
+                    <column>
+                     <property name="text">
+                      <string>Fornecedor</string>
+                     </property>
+                    </column>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QVBoxLayout" name="verticalLayout_4">
+                  <item>
+                   <widget class="QLabel" name="label_2">
+                    <property name="styleSheet">
+                     <string notr="true">background-color: #247ba0;
+color: #fff;</string>
+                    </property>
+                    <property name="text">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;SAÍDA&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QTreeWidget" name="tw_saida">
+                    <property name="styleSheet">
+                     <string notr="true">color: black;
+background-color: #E8F1F2;</string>
+                    </property>
+                    <column>
+                     <property name="text">
+                      <string>Nome do Produto</string>
+                     </property>
+                    </column>
+                    <column>
+                     <property name="text">
+                      <string>Quantidade</string>
+                     </property>
+                    </column>
+                    <column>
+                     <property name="text">
+                      <string>Data e Hora</string>
+                     </property>
+                    </column>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <widget class="QFrame" name="frame_2">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">background-color: #247ba0;</string>
+                </property>
+                <property name="frameShape">
+                 <enum>QFrame::StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_3">
+                 <item>
+                  <widget class="QPushButton" name="btn_add">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">QPushButton{
+   color: black;
+   border-radius: 3px;
+   font-size: 16px;
+   background-color: #FFF;
+}
+
+QPushButton:hover{background-color: rgb(170,255,255); color:black}
+,</string>
+                   </property>
+                   <property name="text">
+                    <string>Adicionar</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="btn_remove">
+                   <property name="styleSheet">
+                    <string notr="true">QPushButton{
+   color: black;
+   border-radius: 3px;
+   font-size: 16px;
+   background-color: #FFF;
+}
+
+QPushButton:hover{background-color: rgb(170,255,255); color:black}
+,</string>
+                   </property>
+                   <property name="text">
+                    <string>Remover</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="btn_refresh">
+                   <property name="styleSheet">
+                    <string notr="true">QPushButton{
+   color: black;
+   border-radius: 3px;
+   font-size: 16px;
+   background-color: #FFF;
+}
+
+QPushButton:hover{background-color: rgb(170,255,255); color:black}
+,</string>
+                   </property>
+                   <property name="text">
+                    <string>Atualizar</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="btn_saida">
+                   <property name="styleSheet">
+                    <string notr="true">QPushButton{
+   color: black;
+   border-radius: 3px;
+   font-size: 16px;
+   background-color: #FFF;
+}
+
+QPushButton:hover{background-color: rgb(170,255,255); color:black}
+,</string>
+                   </property>
+                   <property name="text">
+                    <string>Saída</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="btn_list">
+                   <property name="styleSheet">
+                    <string notr="true">QPushButton{
+   color: black;
+   border-radius: 3px;
+   font-size: 16px;
+   background-color: #FFF;
+}
+
+QPushButton:hover{background-color: rgb(170,255,255); color:black}
+,</string>
+                   </property>
+                   <property name="text">
+                    <string>Listar</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="verticalSpacer">
+                   <property name="orientation">
+                    <enum>Qt::Vertical</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>20</width>
+                     <height>40</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tab_2">
+           <attribute name="title">
+            <string>ESTOQUE</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_10">
+            <item alignment="Qt::AlignHCenter">
+             <widget class="QLabel" name="label_8">
+              <property name="styleSheet">
+               <string notr="true">font: 75 36pt &quot;MS Shell Dlg 2&quot;;
+color:#D3D3D3;</string>
+              </property>
+              <property name="text">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; color:#13293d;&quot;&gt;RELATÓRIO&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_6">
+              <item>
+               <widget class="QPushButton" name="btn_grafico">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>37</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>-1</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton{
+   color: rgb(255, 255, 255);
+   border-radius: 8px;
+   font-size: 22px;
+   background-color: #247ba0;
+}
+
+QPushButton:hover{background-color: rgb(170,255,255); color:black}</string>
+                </property>
+                <property name="text">
+                 <string>GERAR GRÁFICO</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="btn_gerar_excel">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>37</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>-1</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton{
+   color: rgb(255, 255, 255);
+   border-radius: 8px;
+   font-size: 22px;   
+   background-color: #247ba0;
+}
+
+QPushButton:hover{background-color: rgb(170,255,255); color:black}</string>
+                </property>
+                <property name="text">
+                 <string>GERAR EXCEL</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="txt_filtro">
+              <property name="styleSheet">
+               <string notr="true">background-color: #247ba0;
+color: #fff;
+font: 16pt &quot;MS Shell Dlg 2&quot;;</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="echoMode">
+               <enum>QLineEdit::NoEcho</enum>
+              </property>
+              <property name="placeholderText">
+               <string> FILTRO</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QTableView" name="tb_estoque"/>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="pg_pdf">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QWidget" name="pg_excel">
+       <layout class="QVBoxLayout" name="verticalLayout_9">
+        <item alignment="Qt::AlignHCenter">
+         <widget class="QLabel" name="label_5">
+          <property name="styleSheet">
+           <string notr="true">font: 75 36pt &quot;MS Shell Dlg 2&quot;;
+color: #13293d;</string>
+          </property>
+          <property name="text">
+           <string>IMPORTAR TABELA</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <item>
+           <widget class="QLineEdit" name="txt_file">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>14</pointsize>
+              <weight>75</weight>
+              <italic>false</italic>
+              <bold>true</bold>
+              <underline>false</underline>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: #fff;
+background-color:#247BA0;
+height: 35px;
+border-top-left-radius: 15px;
+</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+            <property name="placeholderText">
+             <string>Selecione a pasta com os arquivos XML ---&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btn_open">
+            <property name="minimumSize">
+             <size>
+              <width>120</width>
+              <height>36</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton{
+   color:#FFF;
+   border-top-right-radius: 15px;
+   font-size: 16px;
+   background-color:#247BA0;
+}
+
+QPushButton:hover{background-color: rgb(170,255,255); color:black}</string>
+            </property>
+            <property name="text">
+             <string>ABRIR</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_5">
+          <item>
+           <widget class="QLabel" name="label_4">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btn_import">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>37</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>-1</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton{
+   color: rgb(255, 255, 255);
+   border-radius: 3px;
+   font-size: 22px;
+   background-color:#247BA0;
+}
+
+QPushButton:hover{background-color: rgb(170,255,255); color:black}</string>
+            </property>
+            <property name="text">
+             <string>IMPORTAR</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="pg_home">
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="QLabel" name="label">
+          <property name="minimumSize">
+           <size>
+            <width>905</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+          <property name="text">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:48pt; color:#13293d;&quot;&gt;PROJETO&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:36pt; color:#006494;&quot;&gt;Controle de Estoque&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;&lt;img src=&quot;:/images/img/home-icon.png&quot;/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
+ <connections/>
+</ui>
