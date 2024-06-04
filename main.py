@@ -30,7 +30,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.btn_saida.clicked.connect(self.saida_item_from_estoque)
 
 
-    #Função para adicionar algum item
+    #***Função para adicionar algum item***
+#   Quando o usuário clicka no botão "ADICIONAR", abre uma caixa de diálogo solicitando que ele informe o código do produto que deseja adicionar o estoque. Nela é mostrada uma tabela com os setores relacionados aos últimos dois dígitos do código.
+#   A função "QInputDialog.getText" retorna uma tupla com os seguintes valores: o texto que o usuário digitou e o booleano ok. Esse booleano indica se o usuário clickou no "OK" para confirmar a entrada do texto digitado ou "CANCELAR" para cancelar a operação.
+#   A entrada é validada apenas se a quantidade de dígitos do código for maior ou igual a 2 e se conter apenas números. Caso isso seja atendido e o usuário clickar em "OK", o código realizará a análise dos últimos dígitos e a partir deles atribuir o setor e fornecedor. Se os últimos dígitos forem diferentes da tabela, aparecerá uma mensagem dizendo que este setor é desconhecido.
+#   Em seguida, o código solicita que o usuário informe o nome do produto que deseja cadastrar. Para a validade do produto, ele fará a validação para saber se está no formato (dd/mm/aaaa), caso não esteja aparecerá uma mensagem solicitando que o usuário informe uma data no formato pedido. Realizando isso, pede-se o preço de custo, preço de venda, quantidade e quantidade mínima.
+#   Com todos os dados, agora é criado um novo item que deve ser adicionado na QTreeWidget. Ela representa a tabela de estoque que chamamos de "tw_estoque". Assim, ele vai definindo o texto de cada coluna.
+#   Em "for col in range(9)", temos o loop que vai iterar pelas colunas de 0 a 8. Como "new_item.setForeground(col, QColor(Qt.black))" está dentro do loop, faz com que a cor de cada coluna seja preta.
+#   " self.tw_estoque.addTopLevelItem(new_item)" faz com que o novo item seja adicionado na QTreeWidget, ou seja, o novo item aparece na tabela como uma nova linha em tw_estoque.
+#   Por fim, ele faz a verificação se a quantidade de produto é menor ou igual a quantidade mínima, caso isso ocorra ele adiciona no estoque e chama a função de enviar e-mail.
+
     def add_item_to_estoque(self):
         codigo, ok = QInputDialog.getText(self, "Código", "O último digito é referente ao setor\n01 - Limpeza\n02 - Bebidas\n03 - Hortifruti\n04 - Condimentos\n05 - Padaria\n06 - Biscoitos\n07 - Doces\n08 - Açougue\n09 - Congelados\n10 - Frios\n11 - Limpeza\n12 - Higiene\nDigite o código do produto:\n")
         if ok and codigo.isdigit():
