@@ -130,7 +130,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         else:
             QMessageBox.warning(self, "Aviso", "Operação cancelada pelo usuário.")
     
-    #Função para remover algum item
+    #***Função para remover algum item***
+#   Quando o usuário clica no botão "REMOVER", abre uma caixa de diálogo solicitando que ele informe o nome do produto que deseja remover do estoque.
+#   O usuário digita o nome do produto que deseja remover. A entrada é validada apenas se ele clickar em "OK". Ao clickar em "OK", o código irá procurar pelo nome do produto na QTreeWidget que chamamos de "tw_estoque". Inicializamos com a variável found como sendo "False", é ela que indicará se o produto for encontrado.
+#   Assim, "for i in range(self.tw_estoque.topLevelItemCount()):" é o loop responsável por iterar sobre todas as linhas de 'tw_estoque'. "item = self.tw_estoque.topLevelItem(i)" é referente ao item atual da iteração do loop.
+#   Em "if item.text(1) == nome:", temos a comparação do texto do índice 1 com o nome do produto que o usuário informou. Se os nomes forem iguais, então temos que o produto que queremos remover foi encontrado.
+#   Se o nome do produto for encontrado, ele é removido de "tw_estoque" através de "self.tw_estoque.takeTopLevelItem(i)". Assim, a variável found passa a ser "True" para indicar que foi encontrado. O "break" é utilizado para que possamos sair do loop, visto que o produto já foi encontrado e removido.
+#   Já se o produto não for encontrado, uma mensagem de aviso será exibida. E caso o usuário clicke em "CANCELAR", a operação é cancelada e uma mensagem de aviso é exibida.
     def remove_item_from_estoque(self):
             nome, ok = QInputDialog.getText(self, "Remover Item", "Informe o nome do produto que deseja remover:")
             if ok:
