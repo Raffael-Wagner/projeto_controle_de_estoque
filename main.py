@@ -42,28 +42,40 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
             if dois_ultimos_digitos == '01':
                 setor = "Limpeza"
+                fornecedor = "fornecedor1@gmail.com"
             elif dois_ultimos_digitos == '02':
                 setor = "Bebidas"
+                fornecedor = "fornecedor2@gmail.com"
             elif dois_ultimos_digitos == '03':
                 setor = "Hortifruti"
+                fornecedor = "fornecedor3@gmail.com"
             elif dois_ultimos_digitos == '04':
                 setor = "Condimentos"
+                fornecedor = "fornecedor4@gmail.com"
             elif dois_ultimos_digitos == '05':
                 setor = "Padaria"
+                fornecedor = "fornecedor5@gmail.com"
             elif dois_ultimos_digitos == '06':
                 setor = "Biscoitos"
+                fornecedor = "fornecedor6@gmail.com"
             elif dois_ultimos_digitos == '07':
                 setor = "Doces"
+                fornecedor = "fornecedor7@gmail.com"
             elif dois_ultimos_digitos == '08':
                 setor = "Açougue"
+                fornecedor = "fornecedor8@gmail.com"
             elif dois_ultimos_digitos == '09':
                 setor = "Congelados"
+                fornecedor = "fornecedor9@gmail.com"
             elif dois_ultimos_digitos == '10':
                 setor = "Frios"
+                fornecedor = "fornecedor10@gmail.com"
             elif dois_ultimos_digitos == '11':
                 setor = "Limpeza"
+                fornecedor = "fornecedor11@gmail.com"
             elif dois_ultimos_digitos == '12':
                 setor = "Higiene"
+                fornecedor = "fornecedor12@gmail.com"
             else:
                 QMessageBox.warning(self, "Aviso", "Setor não reconhecido.")
                 return
@@ -88,9 +100,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     quantidade, ok = QInputDialog.getText(self, "Quantidade", "Quantidade:")
                     if ok:
                         quantidade_min, ok = QInputDialog.getText(self, "Quantidade Mínima", "Quantidade Mínima:")
-                        if ok:
-                            fornecedor, ok = QInputDialog.getText(self, "Fornecedor", "Fornecedor:")
-                            if ok:
+                        if ok:                        
                                 new_item = QTreeWidgetItem()
                                 new_item.setText(0, codigo)
                                 new_item.setText(1, nome)
