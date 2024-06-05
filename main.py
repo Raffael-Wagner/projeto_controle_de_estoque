@@ -31,6 +31,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # Botões que estão na aba do Excel
         self.btn_open.clicked.connect(self.open_file_dialog)
+        self.btn_import.clicked.connect(self.import_excel)        
 
 
     #***Função para adicionar algum item***
@@ -272,7 +273,40 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if fileName:
             self.txt_file.setText(fileName)  
 
+    #***Função para iniciar a importação do arquivo Excel***
+#   Inicialmente, obtemos o caminho do arquivo a partir de "self.txt_file.text()" um campo de texto. Caso o caminho não for vazio, então é chamada a função "read_excel" com o caminho do arquivo.
 
+    def import_excel(self):
+        file_path = self.txt_file.text()  
+        if file_path:
+            self.read_excel(file_path)
+
+    #***Função para ler o conteúdo do arquivo Excel***
+#   A função lê o conteúdo do arquivo e em seguida adiciona os dados na "tw_estoque".
+#   "pasta_de_trabalho = openpyxl.load_workbook(file_path)" Inicialmente, abre o arquivo que está localizado no caminho especificado em "file_path" e em seguida carrega o conteúdo no objeto que chamamos de "pasta_de_trabalho".
+#   Depois é selecionada a planilha ativa no arquivo. Geralmente a primeira planilha é a planilha selecionada.
+#   "folha.max_row" e "folha.max_column" retornam o número total de linhas e colunas, respectivamente, presentes na planilha.
+#   No primeiro for, entramos em um loop que percorre cada linha da planilha. Ela inicía a partir da segunda, para poder pular os cabeçalhos (por exemplo, no nosso arquivo a primeira linha são as categorias de separação) e vai até a quantidade de linhas mais um (linhas + 1). Já "item = QTreeWidgetItem()" cria um novo item que é adicionado na "QTreeWidget" (em "tw_estoque").
+#   Dentro do primeiro for, temos o segundo. Nesse segundo for, para cada linha percorrida ele entra no loop para percorre cada coluna.
+#   Assim, "valor_da_celula = folha.cell(row=linha, column=coluna).value" é referente ao valor da posição atual da celula.
+#   "item.setText(coluna - 1, str(valor_celula))" é usado para definir o texto para uma coluna específica de "QTreeWidgetItem". Nos parâmentros, temos que "coluna - 1" é para ajustar o índice, pois no Excel a contagem do índice das colunas começa com 1, já na "QTreeWidgetItem" começa em 0.
+#   Já o segundo parâmentro, temos a conversão do valor da célula para uma string, pois o método "setText" espera que retornemos um argumento do tipo string.
+#   Por fim, ao preencher o item com todos os valores de uma linha, então o item é adicionado ao "tw_estoque". Isso se repete até percorrer todas as linhas da planilha.
+
+    def read_excel(self, file_path):
+        pasta_de_trabalho = openpyxl.load_workbook(file_path)
+        folha = pasta_de_trabalho.active
+
+        linhas = folha.max_row
+        colunas = folha.max_column
+
+        for linha in range(2, linhas + 1):
+            item = QTreeWidgetItem()
+
+            for coluna in range(1, colunas + 1):
+                valor_celula = folha.cell(row=linha, column=coluna).value
+                item.setText(coluna - 1, str(valor_celula))
+            self.tw_estoque.addTopLevelItem(item)
 
 if __name__ == "__main__":
     # Configurar o nível de registro para DEBUG
