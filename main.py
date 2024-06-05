@@ -1,6 +1,7 @@
 from PySide2.QtWidgets import QApplication, QMainWindow, QFileDialog
 from PySide2.QtWidgets import QTreeWidgetItem
 from PySide2.QtWidgets import QInputDialog, QMessageBox
+from PySide2.QtWidgets import QTableWidgetItem
 from ui_main import Ui_MainWindow
 from PySide2.QtGui import QColor
 from PySide2.QtCore import Qt
@@ -10,6 +11,7 @@ import logging
 import datetime
 import smtplib
 import email.message
+import json
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self):
@@ -56,7 +58,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
             if dois_ultimos_digitos == '01':
                 setor = "Limpeza"
-                fornecedor = "fornecedor1@gmail.com"
+                fornecedor = "milorrengaw@gmail.com"
             elif dois_ultimos_digitos == '02':
                 setor = "Bebidas"
                 fornecedor = "fornecedor2@gmail.com"
@@ -209,6 +211,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     if item.text(1) == nome:
                         quantidade_atual = int(item.text(5))
                         quantidade_min = int(item.text(6))
+                        fornecedor = item.text(8)
 
                         if quantidade_saida > quantidade_atual:
                             QMessageBox.warning(self, "Aviso", "Quantidade a ser retirada maior do que a quantidade disponível.")
@@ -220,7 +223,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
                         # Verifica se a quantidade está abaixo do mínimo e envia e-mail
                         if nova_quantidade <= quantidade_min:
-                            self.enviar_email(item.text(1), nova_quantidade, quantidade_min)
+                            self.enviar_email(item.text(1), nova_quantidade, quantidade_min, fornecedor)
                         saida_item = QTreeWidgetItem()
                         saida_item.setText(0, nome.upper())
                         saida_item.setText(1, str(quantidade_saida))
@@ -242,7 +245,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.tw_estoque.clear()
 
     # Função do envio do e-mail
-    def enviar_email(self, nome_produto, quantidade_atual, quantidade_min):
+    def credenciais_email():
+        with open("credenciais.json") as arquivo:
+            dados = json.load(arquivo)
+            return [dados.email, dados.password]
+
+    def enviar_email(self, nome_produto, quantidade_atual, quantidade_min, fornecedor):
+        email,password = self.credenciais_email()
         corpo_email = f"""
         <p>Olá, caro(a) fornecedor(a)</p>
         <hr>
@@ -254,9 +263,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         msg = email.message.Message()
         msg['Subject'] = "Reposição de Estoque"
-        msg['From'] = 'raffaelwagner@gmail.com'
-        msg['To'] = 'milorrengaw@gmail.com'
-        password = ''
+        msg['From'] = email
+        msg['To'] = {fornecedor}
         msg.add_header('Content-Type', 'text/html')
         msg.set_payload(corpo_email)
 
