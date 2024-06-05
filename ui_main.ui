@@ -111,7 +111,7 @@ QPushButton:hover{background-color: rgb(170,255,255); color:black}
     <item>
      <widget class="QStackedWidget" name="Pages">
       <property name="currentIndex">
-       <number>3</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="pg_table">
        <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -121,7 +121,7 @@ QPushButton:hover{background-color: rgb(170,255,255); color:black}
            <string notr="true"/>
           </property>
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="tables">
            <attribute name="title">
@@ -357,6 +357,24 @@ QPushButton:hover{background-color: rgb(170,255,255); color:black}
                    </property>
                    <property name="text">
                     <string>Listar</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="btn_limpar">
+                   <property name="styleSheet">
+                    <string notr="true">QPushButton{
+   color: black;
+   border-radius: 3px;
+   font-size: 16px;
+   background-color: #FFF;
+}
+
+QPushButton:hover{background-color: rgb(170,255,255); color:black}
+,</string>
+                   </property>
+                   <property name="text">
+                    <string>Limpar</string>
                    </property>
                   </widget>
                  </item>

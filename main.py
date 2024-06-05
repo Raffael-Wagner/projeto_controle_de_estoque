@@ -28,6 +28,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.btn_remove.clicked.connect(self.remove_item_from_estoque)
         self.btn_refresh.clicked.connect(self.update_item_from_estoque)
         self.btn_saida.clicked.connect(self.saida_item_from_estoque)
+        self.btn_limpar.clicked.connect(self.limpar_estoque)
 
         # Botões que estão na aba do Excel
         self.btn_open.clicked.connect(self.open_file_dialog)
@@ -179,7 +180,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                                         if ok:
                                             fornecedor, ok = QInputDialog.getText(self, "Atualizar Item", "Fornecedor:", text=item.text(7))
                                             if ok:
-                                                # Atualizar os valores do item
                                                 item.setText(0, codigo)
                                                 item.setText(2, validade)
                                                 item.setText(3, preco_custo)
@@ -236,6 +236,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         else:
             QMessageBox.warning(self, "Aviso", "Operação cancelada pelo usuário.")
 
+    #***Função para limpar o estoque***
+#   Utiliza o método "clear()" para limpar todos os itens presentes na lista de estoque (tw_estoque).
+    def limpar_estoque(self):
+        self.tw_estoque.clear()
+
     # Função do envio do e-mail
     def enviar_email(self, nome_produto, quantidade_atual, quantidade_min):
         corpo_email = f"""
@@ -280,6 +285,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         file_path = self.txt_file.text()  
         if file_path:
             self.read_excel(file_path)
+            QMessageBox.warning(self, "Importação Concluída", "Importação realizada com sucesso.")
 
     #***Função para ler o conteúdo do arquivo Excel***
 #   A função lê o conteúdo do arquivo e em seguida adiciona os dados na "tw_estoque".

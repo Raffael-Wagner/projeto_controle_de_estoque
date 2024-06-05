@@ -228,6 +228,20 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_3.addWidget(self.btn_list)
 
+        self.btn_limpar = QPushButton(self.frame_2)
+        self.btn_limpar.setObjectName(u"btn_limpar")
+        self.btn_limpar.setStyleSheet(u"QPushButton{\n"
+"   color: black;\n"
+"   border-radius: 3px;\n"
+"   font-size: 16px;\n"
+"   background-color: #FFF;\n"
+"}\n"
+"\n"
+"QPushButton:hover{background-color: rgb(170,255,255); color:black}\n"
+",")
+
+        self.verticalLayout_3.addWidget(self.btn_limpar)
+
         self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.verticalLayout_3.addItem(self.verticalSpacer)
@@ -408,8 +422,8 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.Pages.setCurrentIndex(3)
-        self.tabWidget.setCurrentIndex(1)
+        self.Pages.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -441,6 +455,7 @@ class Ui_MainWindow(object):
         self.btn_refresh.setText(QCoreApplication.translate("MainWindow", u"Atualizar", None))
         self.btn_saida.setText(QCoreApplication.translate("MainWindow", u"Sa\u00edda", None))
         self.btn_list.setText(QCoreApplication.translate("MainWindow", u"Listar", None))
+        self.btn_limpar.setText(QCoreApplication.translate("MainWindow", u"Limpar", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tables), QCoreApplication.translate("MainWindow", u"BASE", None))
         self.label_8.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p align=\"center\"><span style=\" color:#13293d;\">RELAT\u00d3RIO</span></p></body></html>", None))
         self.btn_grafico.setText(QCoreApplication.translate("MainWindow", u"GERAR GR\u00c1FICO", None))
