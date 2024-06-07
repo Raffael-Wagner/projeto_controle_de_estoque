@@ -18,12 +18,12 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(941, 518)
+        MainWindow.resize(941, 587)
         MainWindow.setStyleSheet(u"background-color:#e8f1f2;")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
-        self.verticalLayout = QVBoxLayout(self.centralwidget)
-        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.verticalLayout_8 = QVBoxLayout(self.centralwidget)
+        self.verticalLayout_8.setObjectName(u"verticalLayout_8")
         self.frame = QFrame(self.centralwidget)
         self.frame.setObjectName(u"frame")
         self.frame.setEnabled(True)
@@ -80,7 +80,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout.addWidget(self.btn_excel)
 
 
-        self.verticalLayout.addWidget(self.frame)
+        self.verticalLayout_8.addWidget(self.frame)
 
         self.Pages = QStackedWidget(self.centralwidget)
         self.Pages.setObjectName(u"Pages")
@@ -93,8 +93,8 @@ class Ui_MainWindow(object):
         self.tabWidget.setStyleSheet(u"")
         self.tables = QWidget()
         self.tables.setObjectName(u"tables")
-        self.verticalLayout_8 = QVBoxLayout(self.tables)
-        self.verticalLayout_8.setObjectName(u"verticalLayout_8")
+        self.verticalLayout = QVBoxLayout(self.tables)
+        self.verticalLayout.setObjectName(u"verticalLayout")
         self.horizontalLayout_2 = QHBoxLayout()
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.verticalLayout_6 = QVBoxLayout()
@@ -162,9 +162,10 @@ class Ui_MainWindow(object):
         self.btn_add.setMinimumSize(QSize(0, 0))
         self.btn_add.setStyleSheet(u"QPushButton{\n"
 "   color: black;\n"
-"   border-radius: 3px;\n"
+"   border-radius: 8px;\n"
 "   font-size: 16px;\n"
 "   background-color: #FFF;\n"
+"padding: 5px;\n"
 "}\n"
 "\n"
 "QPushButton:hover{background-color: rgb(170,255,255); color:black}\n"
@@ -176,9 +177,10 @@ class Ui_MainWindow(object):
         self.btn_remove.setObjectName(u"btn_remove")
         self.btn_remove.setStyleSheet(u"QPushButton{\n"
 "   color: black;\n"
-"   border-radius: 3px;\n"
+"   border-radius: 5px;\n"
 "   font-size: 16px;\n"
 "   background-color: #FFF;\n"
+"padding: 5px;\n"
 "}\n"
 "\n"
 "QPushButton:hover{background-color: rgb(170,255,255); color:black}\n"
@@ -190,9 +192,10 @@ class Ui_MainWindow(object):
         self.btn_refresh.setObjectName(u"btn_refresh")
         self.btn_refresh.setStyleSheet(u"QPushButton{\n"
 "   color: black;\n"
-"   border-radius: 3px;\n"
+"   border-radius: 5px;\n"
 "   font-size: 16px;\n"
 "   background-color: #FFF;\n"
+"padding: 5px;\n"
 "}\n"
 "\n"
 "QPushButton:hover{background-color: rgb(170,255,255); color:black}\n"
@@ -204,9 +207,10 @@ class Ui_MainWindow(object):
         self.btn_saida.setObjectName(u"btn_saida")
         self.btn_saida.setStyleSheet(u"QPushButton{\n"
 "   color: black;\n"
-"   border-radius: 3px;\n"
+"   border-radius: 5px;\n"
 "   font-size: 16px;\n"
 "   background-color: #FFF;\n"
+"padding: 5px;\n"
 "}\n"
 "\n"
 "QPushButton:hover{background-color: rgb(170,255,255); color:black}\n"
@@ -214,33 +218,55 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_3.addWidget(self.btn_saida)
 
-        self.btn_list = QPushButton(self.frame_2)
-        self.btn_list.setObjectName(u"btn_list")
-        self.btn_list.setStyleSheet(u"QPushButton{\n"
-"   color: black;\n"
-"   border-radius: 3px;\n"
-"   font-size: 16px;\n"
-"   background-color: #FFF;\n"
-"}\n"
-"\n"
-"QPushButton:hover{background-color: rgb(170,255,255); color:black}\n"
-",")
-
-        self.verticalLayout_3.addWidget(self.btn_list)
-
         self.btn_limpar = QPushButton(self.frame_2)
         self.btn_limpar.setObjectName(u"btn_limpar")
         self.btn_limpar.setStyleSheet(u"QPushButton{\n"
 "   color: black;\n"
-"   border-radius: 3px;\n"
+"   border-radius: 5px;\n"
 "   font-size: 16px;\n"
 "   background-color: #FFF;\n"
+"padding: 5px;\n"
 "}\n"
 "\n"
 "QPushButton:hover{background-color: rgb(170,255,255); color:black}\n"
 ",")
 
         self.verticalLayout_3.addWidget(self.btn_limpar)
+
+        self.btn_grafico = QPushButton(self.frame_2)
+        self.btn_grafico.setObjectName(u"btn_grafico")
+        self.btn_grafico.setMinimumSize(QSize(0, 0))
+        font = QFont()
+        self.btn_grafico.setFont(font)
+        self.btn_grafico.setStyleSheet(u"QPushButton{\n"
+"   color: black;\n"
+"   border-radius: 5px;\n"
+"   font-size: 16px;\n"
+"   background-color: #FFF;\n"
+"padding: 5px;\n"
+"}\n"
+"\n"
+"QPushButton:hover{background-color: rgb(170,255,255); color:black}\n"
+",")
+
+        self.verticalLayout_3.addWidget(self.btn_grafico)
+
+        self.btn_gerar_excel = QPushButton(self.frame_2)
+        self.btn_gerar_excel.setObjectName(u"btn_gerar_excel")
+        self.btn_gerar_excel.setMinimumSize(QSize(0, 0))
+        self.btn_gerar_excel.setFont(font)
+        self.btn_gerar_excel.setStyleSheet(u"QPushButton{\n"
+"   color: black;\n"
+"   border-radius: 5px;\n"
+"   font-size: 16px;\n"
+"   background-color: #FFF;\n"
+"padding: 5px;\n"
+"}\n"
+"\n"
+"QPushButton:hover{background-color: rgb(170,255,255); color:black}\n"
+",")
+
+        self.verticalLayout_3.addWidget(self.btn_gerar_excel)
 
         self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
@@ -250,79 +276,13 @@ class Ui_MainWindow(object):
         self.horizontalLayout_2.addWidget(self.frame_2)
 
 
-        self.verticalLayout_8.addLayout(self.horizontalLayout_2)
+        self.verticalLayout.addLayout(self.horizontalLayout_2)
 
         self.tabWidget.addTab(self.tables, "")
-        self.tab_2 = QWidget()
-        self.tab_2.setObjectName(u"tab_2")
-        self.verticalLayout_10 = QVBoxLayout(self.tab_2)
-        self.verticalLayout_10.setObjectName(u"verticalLayout_10")
-        self.label_8 = QLabel(self.tab_2)
-        self.label_8.setObjectName(u"label_8")
-        self.label_8.setStyleSheet(u"font: 75 36pt \"MS Shell Dlg 2\";\n"
-"color:#D3D3D3;")
-
-        self.verticalLayout_10.addWidget(self.label_8, 0, Qt.AlignHCenter)
-
-        self.horizontalLayout_6 = QHBoxLayout()
-        self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
-        self.btn_grafico = QPushButton(self.tab_2)
-        self.btn_grafico.setObjectName(u"btn_grafico")
-        self.btn_grafico.setMinimumSize(QSize(0, 37))
-        font = QFont()
-        self.btn_grafico.setFont(font)
-        self.btn_grafico.setStyleSheet(u"QPushButton{\n"
-"   color: rgb(255, 255, 255);\n"
-"   border-radius: 8px;\n"
-"   font-size: 22px;\n"
-"   background-color: #247ba0;\n"
-"}\n"
-"\n"
-"QPushButton:hover{background-color: rgb(170,255,255); color:black}")
-
-        self.horizontalLayout_6.addWidget(self.btn_grafico)
-
-        self.btn_gerar_excel = QPushButton(self.tab_2)
-        self.btn_gerar_excel.setObjectName(u"btn_gerar_excel")
-        self.btn_gerar_excel.setMinimumSize(QSize(0, 37))
-        self.btn_gerar_excel.setFont(font)
-        self.btn_gerar_excel.setStyleSheet(u"QPushButton{\n"
-"   color: rgb(255, 255, 255);\n"
-"   border-radius: 8px;\n"
-"   font-size: 22px;   \n"
-"   background-color: #247ba0;\n"
-"}\n"
-"\n"
-"QPushButton:hover{background-color: rgb(170,255,255); color:black}")
-
-        self.horizontalLayout_6.addWidget(self.btn_gerar_excel)
-
-
-        self.verticalLayout_10.addLayout(self.horizontalLayout_6)
-
-        self.txt_filtro = QLineEdit(self.tab_2)
-        self.txt_filtro.setObjectName(u"txt_filtro")
-        self.txt_filtro.setStyleSheet(u"background-color: #247ba0;\n"
-"color: #fff;\n"
-"font: 16pt \"MS Shell Dlg 2\";")
-        self.txt_filtro.setEchoMode(QLineEdit.NoEcho)
-
-        self.verticalLayout_10.addWidget(self.txt_filtro)
-
-        self.tb_estoque = QTableView(self.tab_2)
-        self.tb_estoque.setObjectName(u"tb_estoque")
-
-        self.verticalLayout_10.addWidget(self.tb_estoque)
-
-        self.tabWidget.addTab(self.tab_2, "")
 
         self.verticalLayout_7.addWidget(self.tabWidget)
 
         self.Pages.addWidget(self.pg_table)
-        self.pg_pdf = QWidget()
-        self.pg_pdf.setObjectName(u"pg_pdf")
-        self.pg_pdf.setEnabled(True)
-        self.Pages.addWidget(self.pg_pdf)
         self.pg_excel = QWidget()
         self.pg_excel.setObjectName(u"pg_excel")
         self.verticalLayout_9 = QVBoxLayout(self.pg_excel)
@@ -416,13 +376,13 @@ class Ui_MainWindow(object):
 
         self.Pages.addWidget(self.pg_home)
 
-        self.verticalLayout.addWidget(self.Pages)
+        self.verticalLayout_8.addWidget(self.Pages)
 
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
 
-        self.Pages.setCurrentIndex(3)
+        self.Pages.setCurrentIndex(2)
         self.tabWidget.setCurrentIndex(0)
 
 
@@ -454,15 +414,10 @@ class Ui_MainWindow(object):
         self.btn_remove.setText(QCoreApplication.translate("MainWindow", u"Remover", None))
         self.btn_refresh.setText(QCoreApplication.translate("MainWindow", u"Atualizar", None))
         self.btn_saida.setText(QCoreApplication.translate("MainWindow", u"Sa\u00edda", None))
-        self.btn_list.setText(QCoreApplication.translate("MainWindow", u"Listar", None))
         self.btn_limpar.setText(QCoreApplication.translate("MainWindow", u"Limpar", None))
+        self.btn_grafico.setText(QCoreApplication.translate("MainWindow", u"Gerar Gr\u00e1fico", None))
+        self.btn_gerar_excel.setText(QCoreApplication.translate("MainWindow", u"Salvar Excel", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tables), QCoreApplication.translate("MainWindow", u"BASE", None))
-        self.label_8.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p align=\"center\"><span style=\" color:#13293d;\">RELAT\u00d3RIO</span></p></body></html>", None))
-        self.btn_grafico.setText(QCoreApplication.translate("MainWindow", u"GERAR GR\u00c1FICO", None))
-        self.btn_gerar_excel.setText(QCoreApplication.translate("MainWindow", u"GERAR EXCEL", None))
-        self.txt_filtro.setText("")
-        self.txt_filtro.setPlaceholderText(QCoreApplication.translate("MainWindow", u" FILTRO", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QCoreApplication.translate("MainWindow", u"ESTOQUE", None))
         self.label_5.setText(QCoreApplication.translate("MainWindow", u"IMPORTAR TABELA", None))
         self.txt_file.setText("")
         self.txt_file.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Selecione a pasta com os arquivos XML --->", None))

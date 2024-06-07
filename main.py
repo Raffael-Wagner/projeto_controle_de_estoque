@@ -1,26 +1,32 @@
-from PySide2.QtWidgets import QApplication, QMainWindow, QFileDialog
-from PySide2.QtWidgets import QTreeWidgetItem
-from PySide2.QtWidgets import QInputDialog, QMessageBox
-from PySide2.QtWidgets import QTableWidgetItem
+from PySide2.QtWidgets import QApplication, QMainWindow, QFileDialog, QInputDialog, QMessageBox, QTreeWidgetItem
+from excel import open_file_dialog, import_excel, gerar_excel_estoque_manual, read_excel, update_excel
+from utilitarios import enviar_email, mostrar_grafico, credenciais_email, codigo_existente, nome_existente
 from ui_main import Ui_MainWindow
 from PySide2.QtGui import QColor
 from PySide2.QtCore import Qt
-import sys
-import openpyxl
-import logging
-import datetime
-import smtplib
+import matplotlib.pyplot as plt
 import email.message
+import pandas as pd
+import datetime
+import logging
+import smtplib
 import json
+import sys
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
         self.setupUi(self)
-        self.setWindowTitle("Sistema de Gerenciamento")
+        self.excel_file_path = None
+        self.setWindowTitle("Sistema EstoKI")
+
+        #Inicializar dicionário de saídas dos produtos
+        self.saidas = {}
+
+        #Inicializar o DataFrame - ele vai ajudar no processo de modificar o arquivo Excel
+        self.df_estoque = pd.DataFrame()
 
         #Botões de cada aba na barra de cima (basicamente é pra navegar naquelas 'abas')
-        #Esses nomes pg_home, pg_table e pg_excel, eu coloquei no aplicativo QT Designer. Foi seguindo o vídeo que Laryssa mandou.
         self.btn_inicio.clicked.connect(lambda: self.Pages.setCurrentWidget(self.pg_home))
         self.btn_estoque.clicked.connect(lambda: self.Pages.setCurrentWidget(self.pg_table))
         self.btn_excel.clicked.connect(lambda: self.Pages.setCurrentWidget(self.pg_excel))
@@ -31,143 +37,144 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.btn_refresh.clicked.connect(self.update_item_from_estoque)
         self.btn_saida.clicked.connect(self.saida_item_from_estoque)
         self.btn_limpar.clicked.connect(self.limpar_estoque)
+        self.btn_grafico.clicked.connect(lambda: mostrar_grafico(self.saidas))
+        self.btn_gerar_excel.clicked.connect(lambda: gerar_excel_estoque_manual(self))
 
         # Botões que estão na aba do Excel
-        self.btn_open.clicked.connect(self.open_file_dialog)
-        self.btn_import.clicked.connect(self.import_excel)        
+        self.btn_open.clicked.connect(lambda: open_file_dialog(self))
+        self.btn_import.clicked.connect(lambda: import_excel(self))        
 
-
-    #***Função para adicionar algum item***
-#   Quando o usuário clicka no botão "ADICIONAR", abre uma caixa de diálogo solicitando que ele informe o código do produto que deseja adicionar o estoque. Nela é mostrada uma tabela com os setores relacionados aos últimos dois dígitos do código.
-#   A função "QInputDialog.getText" retorna uma tupla com os seguintes valores: o texto que o usuário digitou e o booleano ok. Esse booleano indica se o usuário clickou no "OK" para confirmar a entrada do texto digitado ou "CANCELAR" para cancelar a operação.
-#   A entrada é validada apenas se a quantidade de dígitos do código for maior ou igual a 2 e se conter apenas números. Caso isso seja atendido e o usuário clickar em "OK", o código realizará a análise dos últimos dígitos e a partir deles atribuir o setor e fornecedor. Se os últimos dígitos forem diferentes da tabela, aparecerá uma mensagem dizendo que este setor é desconhecido.
-#   Em seguida, o código solicita que o usuário informe o nome do produto que deseja cadastrar. Para a validade do produto, ele fará a validação para saber se está no formato (dd/mm/aaaa), caso não esteja aparecerá uma mensagem solicitando que o usuário informe uma data no formato pedido. Realizando isso, pede-se o preço de custo, preço de venda, quantidade e quantidade mínima.
-#   Com todos os dados, agora é criado um novo item que deve ser adicionado na QTreeWidget. Ela representa a tabela de estoque que chamamos de "tw_estoque". Assim, ele vai definindo o texto de cada coluna.
-#   Em "for col in range(9)", temos o loop que vai iterar pelas colunas de 0 a 8. Como "new_item.setForeground(col, QColor(Qt.black))" está dentro do loop, faz com que a cor de cada coluna seja preta.
-#   " self.tw_estoque.addTopLevelItem(new_item)" faz com que o novo item seja adicionado na QTreeWidget, ou seja, o novo item aparece na tabela como uma nova linha em tw_estoque.
-#   Por fim, ele faz a verificação se a quantidade de produto é menor ou igual a quantidade mínima, caso isso ocorra ele adiciona no estoque e chama a função de enviar e-mail.
+        self.update_excel()
 
     def add_item_to_estoque(self):
+        setores_fornecedores = {
+        '01': ("Limpeza", "milorrengaw@gmail.com"),
+        '02': ("Bebidas", "fornecedor2@gmail.com"),
+        '03': ("Hortifruti", "fornecedor3@gmail.com"),
+        '04': ("Condimentos", "fornecedor4@gmail.com"),
+        '05': ("Padaria", "fornecedor5@gmail.com"),
+        '06': ("Biscoitos", "fornecedor6@gmail.com"),
+        '07': ("Doces", "fornecedor7@gmail.com"),
+        '08': ("Açougue", "fornecedor8@gmail.com"),
+        '09': ("Congelados", "fornecedor9@gmail.com"),
+        '10': ("Frios", "fornecedor10@gmail.com"),
+        '11': ("Limpeza", "fornecedor11@gmail.com"),
+        '12': ("Higiene", "fornecedor12@gmail.com")
+    }
         codigo, ok = QInputDialog.getText(self, "Código", "O último digito é referente ao setor\n01 - Limpeza\n02 - Bebidas\n03 - Hortifruti\n04 - Condimentos\n05 - Padaria\n06 - Biscoitos\n07 - Doces\n08 - Açougue\n09 - Congelados\n10 - Frios\n11 - Limpeza\n12 - Higiene\nDigite o código do produto:\n")
+
         if ok and codigo.isdigit():
             if len(codigo) < 2:
                 QMessageBox.warning(self, "Aviso", "O código deve ter pelo menos dois dígitos.")
                 return
-
+            
+            if codigo_existente(self.tw_estoque, codigo):
+                QMessageBox.warning(self, "Aviso", "O código informado já está em uso.")
+                return
+        
             dois_ultimos_digitos = codigo[-2:]
-
-            if dois_ultimos_digitos == '01':
-                setor = "Limpeza"
-                fornecedor = "milorrengaw@gmail.com"
-            elif dois_ultimos_digitos == '02':
-                setor = "Bebidas"
-                fornecedor = "fornecedor2@gmail.com"
-            elif dois_ultimos_digitos == '03':
-                setor = "Hortifruti"
-                fornecedor = "fornecedor3@gmail.com"
-            elif dois_ultimos_digitos == '04':
-                setor = "Condimentos"
-                fornecedor = "fornecedor4@gmail.com"
-            elif dois_ultimos_digitos == '05':
-                setor = "Padaria"
-                fornecedor = "fornecedor5@gmail.com"
-            elif dois_ultimos_digitos == '06':
-                setor = "Biscoitos"
-                fornecedor = "fornecedor6@gmail.com"
-            elif dois_ultimos_digitos == '07':
-                setor = "Doces"
-                fornecedor = "fornecedor7@gmail.com"
-            elif dois_ultimos_digitos == '08':
-                setor = "Açougue"
-                fornecedor = "fornecedor8@gmail.com"
-            elif dois_ultimos_digitos == '09':
-                setor = "Congelados"
-                fornecedor = "fornecedor9@gmail.com"
-            elif dois_ultimos_digitos == '10':
-                setor = "Frios"
-                fornecedor = "fornecedor10@gmail.com"
-            elif dois_ultimos_digitos == '11':
-                setor = "Limpeza"
-                fornecedor = "fornecedor11@gmail.com"
-            elif dois_ultimos_digitos == '12':
-                setor = "Higiene"
-                fornecedor = "fornecedor12@gmail.com"
+            if dois_ultimos_digitos in setores_fornecedores:
+                setor, fornecedor = setores_fornecedores[dois_ultimos_digitos]
             else:
-                QMessageBox.warning(self, "Aviso", "Setor não reconhecido.")
+                QMessageBox.warning(self, "Aviso", "Não reconhecemos este setor.")
                 return
         else:
             QMessageBox.warning(self, "Aviso", "Insira um código válido contendo apenas números.")
             return
 
         nome, ok = QInputDialog.getText(self, "Produto", "Nome do produto:")
-        if ok:
-            validade, ok = QInputDialog.getText(self, "Validade", "Validade(dd/mm/aaaa):")
-            try:
-                validade_date = datetime.datetime.strptime(validade, '%d/%m/%Y')
-                        
-            except ValueError:
-                QMessageBox.warning(self, "Aviso", "Informe uma data de validade válida no formato dd/mm/aaaa.")
-                return
-            
-            preco_custo, ok = QInputDialog.getText(self, "Preço de Custo", "Preço de Custo:")
-            if ok:
-                preco_venda, ok = QInputDialog.getText(self, "Preço de Venda", "Preço de Venda:")
-                if ok:
-                    quantidade, ok = QInputDialog.getText(self, "Quantidade", "Quantidade:")
-                    if ok:
-                        quantidade_min, ok = QInputDialog.getText(self, "Quantidade Mínima", "Quantidade Mínima:")
-                        if ok:                        
-                                new_item = QTreeWidgetItem()
-                                new_item.setText(0, codigo)
-                                new_item.setText(1, nome)
-                                new_item.setText(2, validade)
-                                new_item.setText(3, preco_custo)
-                                new_item.setText(4, preco_venda)
-                                new_item.setText(5, quantidade)
-                                new_item.setText(6, quantidade_min)
-                                new_item.setText(7, setor)
-                                new_item.setText(8, fornecedor)
-                                for col in range(9):
-                                    new_item.setForeground(col, QColor(Qt.black))
-
-                                self.tw_estoque.addTopLevelItem(new_item)
-
-                                if int(quantidade) <= int(quantidade_min):
-                                    self.enviar_email()
-        else:
+        if not ok:
             QMessageBox.warning(self, "Aviso", "Operação cancelada pelo usuário.")
-    
-    #***Função para remover algum item***
-#   Quando o usuário clica no botão "REMOVER", abre uma caixa de diálogo solicitando que ele informe o nome do produto que deseja remover do estoque.
-#   O usuário digita o nome do produto que deseja remover. A entrada é validada apenas se ele clickar em "OK". Ao clickar em "OK", o código irá procurar pelo nome do produto na QTreeWidget que chamamos de "tw_estoque". Inicializamos com a variável found como sendo "False", é ela que indicará se o produto for encontrado.
-#   Assim, "for i in range(self.tw_estoque.topLevelItemCount()):" é o loop responsável por iterar sobre todas as linhas de 'tw_estoque'. "item = self.tw_estoque.topLevelItem(i)" é referente ao item atual da iteração do loop.
-#   Em "if item.text(1) == nome:", temos a comparação do texto do índice 1 com o nome do produto que o usuário informou. Se os nomes forem iguais, então temos que o produto que queremos remover foi encontrado.
-#   Se o nome do produto for encontrado, ele é removido de "tw_estoque" através de "self.tw_estoque.takeTopLevelItem(i)". Assim, a variável found passa a ser "True" para indicar que foi encontrado. O "break" é utilizado para que possamos sair do loop, visto que o produto já foi encontrado e removido.
-#   Já se o produto não for encontrado, uma mensagem de aviso será exibida. E caso o usuário clicke em "CANCELAR", a operação é cancelada e uma mensagem de aviso é exibida.
+            return
+        
+        if nome_existente(self.tw_estoque, nome):
+            QMessageBox.warning(self, "Aviso", "Este produto já está em nosso estoque. Por favor, insira um outro produto ou atualize-o.")
+            return
+
+        validade, ok = QInputDialog.getText(self, "Validade", "Validade(dd/mm/aaaa):")
+        if not ok:
+            QMessageBox.warning(self, "Aviso", "Operação cancelada pelo usuário.")
+            return
+
+        try:
+            validade_date = datetime.datetime.strptime(validade, '%d/%m/%Y')
+            if validade_date <= datetime.datetime.now():
+                QMessageBox.warning(self, "Aviso", "Nosso sistema não aceita produtos vencidos.")
+                return
+        except ValueError:
+            QMessageBox.warning(self, "Aviso", "Informe uma data de validade válida no formato dd/mm/aaaa.")
+            return
+
+        preco_custo, ok = QInputDialog.getText(self, "Preço de Custo", "Preço de Custo:")
+        if not ok or float(preco_custo) <= 0:
+            QMessageBox.warning(self, "Aviso", "Operação cancelada pelo usuário.")
+            return
+
+        preco_venda, ok = QInputDialog.getText(self, "Preço de Venda", "Preço de Venda:")
+        if not ok or float(preco_venda) <= 0:
+            QMessageBox.warning(self, "Aviso", "Operação cancelada pelo usuário.")
+            return
+
+        quantidade, ok = QInputDialog.getText(self, "Quantidade", "Quantidade:")
+        if not ok or int(quantidade) <=0 :
+            QMessageBox.warning(self, "Aviso", "Operação cancelada pelo usuário.")
+            return
+
+        quantidade_min, ok = QInputDialog.getText(self, "Quantidade Mínima", "Quantidade Mínima:")
+        if not ok or int(quantidade_min) <=0 :
+            QMessageBox.warning(self, "Aviso", "Operação cancelada pelo usuário.")
+            return
+
+        preco_custo = "{:.2f}".format(float(preco_custo))
+        preco_venda = "{:.2f}".format(float(preco_venda))
+        
+        new_item = QTreeWidgetItem()
+        new_item.setText(0, codigo)
+        new_item.setText(1, nome)
+        new_item.setText(2, validade)
+        new_item.setText(3, preco_custo)
+        new_item.setText(4, preco_venda)
+        new_item.setText(5, quantidade)
+        new_item.setText(6, quantidade_min)
+        new_item.setText(7, setor)
+        new_item.setText(8, fornecedor)
+        for col in range(9):
+            new_item.setForeground(col, QColor(Qt.black))
+
+        self.tw_estoque.addTopLevelItem(new_item)
+
+        if int(quantidade) <= int(quantidade_min):
+            enviar_email(nome, quantidade, quantidade_min, fornecedor)
+
+        if self.excel_file_path:
+            self.update_excel()
+
     def remove_item_from_estoque(self):
             nome, ok = QInputDialog.getText(self, "Remover Item", "Informe o nome do produto que deseja remover:")
             if ok:
-                found = False
+                encontrar = False
                 for i in range(self.tw_estoque.topLevelItemCount()):
                     item = self.tw_estoque.topLevelItem(i)
                     if item.text(1) == nome:
                         self.tw_estoque.takeTopLevelItem(i)
-                        found = True
+                        encontrar = True
                         break
-                if not found:
+                if not encontrar:
                     QMessageBox.warning(self, "Aviso", "Produto não encontrado no estoque.")
             else:
                 QMessageBox.warning(self, "Aviso", "Operação cancelada pelo usuário.")
 
-    #Função para atualizar algum item
+            if self.excel_file_path:
+                self.update_excel()
+
     def update_item_from_estoque(self):
         nome, ok = QInputDialog.getText(self, "Atualizar Item", "Nome do produto para atualizar:")
         if ok:
-            found = False
+            encontrar = False
             for i in range(self.tw_estoque.topLevelItemCount()):
                 item = self.tw_estoque.topLevelItem(i)
                 if item.text(1) == nome:
-                    found = True
+                    encontrar = True
                     codigo, ok = QInputDialog.getText(self, "Atualizar Item", "Código:", text=item.text(0))
                     if ok:
                         validade, ok = QInputDialog.getText(self, "Atualizar Item", "Validade:", text=item.text(2))
@@ -190,12 +197,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                                                 item.setText(6, quantidade_min)
                                                 item.setText(7, fornecedor)
                     break
-            if not found:
+            if not encontrar:
                 QMessageBox.warning(self, "Aviso", "Produto não encontrado no estoque.")
         else:
             QMessageBox.warning(self, "Aviso", "Operação cancelada pelo usuário.")
     
-    #Função para a realização da saída
+        if self.excel_file_path:
+            self.update_excel()
+
     def saida_item_from_estoque(self):
         nome, ok = QInputDialog.getText(self, "Saída de Item", "Informe o nome do produto:")
         if ok:
@@ -205,7 +214,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     QMessageBox.warning(self, "Aviso", "A quantidade a ser retirada deve ser um número válido (positivo).")
                     return
             
-                found = False
+                encontrar = False
                 for i in range(self.tw_estoque.topLevelItemCount()):
                     item = self.tw_estoque.topLevelItem(i)
                     if item.text(1) == nome:
@@ -219,113 +228,46 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
                         nova_quantidade = quantidade_atual - quantidade_saida
                         item.setText(5, str(nova_quantidade))
-                        found = True
+                        encontrar = True
 
-                        # Verifica se a quantidade está abaixo do mínimo e envia e-mail
+                        if nome in self.saidas:
+                            self.saidas[nome] += quantidade_saida
+                        else:
+                            self.saidas[nome] = quantidade_saida
+
                         if nova_quantidade <= quantidade_min:
-                            self.enviar_email(item.text(1), nova_quantidade, quantidade_min, fornecedor)
+                            enviar_email(item.text(1), nova_quantidade, quantidade_min, fornecedor)
                         saida_item = QTreeWidgetItem()
                         saida_item.setText(0, nome.upper())
                         saida_item.setText(1, str(quantidade_saida))
                         saida_item.setText(2, datetime.datetime.now().strftime('%d/%m/%Y %H:%M:%S'))
+
+                        for column in range(saida_item.columnCount()):
+                            saida_item.setForeground(column, QColor(Qt.red))
                         self.tw_saida.addTopLevelItem(saida_item)
 
                         break
 
-                if not found:
+                if not encontrar:
                     QMessageBox.warning(self, "Aviso", "Produto não encontrado no estoque.")
             else:
                 QMessageBox.warning(self, "Aviso", "Operação cancelada pelo usuário.")
         else:
             QMessageBox.warning(self, "Aviso", "Operação cancelada pelo usuário.")
 
-    #***Função para limpar o estoque***
-#   Utiliza o método "clear()" para limpar todos os itens presentes na lista de estoque (tw_estoque).
+        if self.excel_file_path:
+            self.update_excel()
+
     def limpar_estoque(self):
         self.tw_estoque.clear()
+        self.tw_saida.clear()
+        if self.excel_file_path:
+            self.update_excel()
 
-    # Função do envio do e-mail
-    def credenciais_email():
-        with open("credenciais.json") as arquivo:
-            dados = json.load(arquivo)
-            return [dados.email, dados.password]
-
-    def enviar_email(self, nome_produto, quantidade_atual, quantidade_min, fornecedor):
-        email,password = self.credenciais_email()
-        corpo_email = f"""
-        <p>Olá, caro(a) fornecedor(a)</p>
-        <hr>
-        <p>A Equipe EstoKI vem, por meio desta, informar que nosso estoque do produto {nome_produto} está ficando baixo. Atualmente, nos restam apenas {quantidade_atual} unidades em nosso estoque, sendo insuficiente para atender à demanda que espera-se para o próximo mês.</p>
-        <p>Sabendo que o produto tem uma certa popularidade e vem mostrando rapidez em vendas, gostaríamos de realizar a solicitação do reabastecimento de {quantidade_min * 3} unidades o mais rápido possível. Agradecemos sua atenção. </p>
-        <p>Atenciosamente,</p>
-        <p>EstoKI</p>
-        """
-
-        msg = email.message.Message()
-        msg['Subject'] = "Reposição de Estoque"
-        msg['From'] = email
-        msg['To'] = {fornecedor}
-        msg.add_header('Content-Type', 'text/html')
-        msg.set_payload(corpo_email)
-
-        s = smtplib.SMTP('smtp.gmail.com: 587')
-        s.starttls()
-        s.login(msg['From'], password)
-        s.sendmail(msg['From'], [msg['To']], msg.as_string().encode('utf-8'))
-
-    #***Função para selecionar um arquivo
-#   Abre uma caixa de diálogo para que o usuário possa selecionar o arquivo que deseja importar.
-#   "options = QFileDialog.Options()"é criado um objeto do QFileDialog que reune as configurações da janela de diálogo, como por exemplo, pode-se colocar uma configuração que a caixa de diálogo tenha a aparência e as funções do Qt e não do sistema operacional.
-#   "QFileDialog.getOpenFileName" abre uma janela para que o usuário selecione o arquivo desejado. O "self" é a instância da classe atual e "Abrir Arquivo Exvel" é o título da janela aberta. Nas aspas "" temos o diretório inicial, mas por estar vazia significa que será o diretório padrão. "Excel Files (*.xlsx);; All Files (*)" se refere a definição dos arquivos que o usuário pode selecionar. E por fim, "options=options" aplica as configurações que foram definidas.
-#   Assim, a função nos retorna uma tupla, onde o primeiro elemento é o caminho completo do arquivo selecionado e o segundo elemento é um espaço reservado para uma variável que não utilizaremos.
-#   "if fileName:" é a verificação se "fileName" não está vazio, isto é, se o usuário de fato selecionou um arquivo. Caso isso ocorra, o caminho completo do arquivo é definido como o texto do widget "txt_file"(nome definido no Qt Designer). Dessa maneira, no "QLineEdit" teremos a exibição do caminho do arquivo.
-    def open_file_dialog(self):
-        options = QFileDialog.Options()
-
-        fileName, _ = QFileDialog.getOpenFileName(self, "Abrir Arquivo Excel", "", "Excel Files (*.xlsx);;  All Files (*)", options=options)
-        if fileName:
-            self.txt_file.setText(fileName)  
-
-    #***Função para iniciar a importação do arquivo Excel***
-#   Inicialmente, obtemos o caminho do arquivo a partir de "self.txt_file.text()" um campo de texto. Caso o caminho não for vazio, então é chamada a função "read_excel" com o caminho do arquivo.
-
-    def import_excel(self):
-        file_path = self.txt_file.text()  
-        if file_path:
-            self.read_excel(file_path)
-            QMessageBox.warning(self, "Importação Concluída", "Importação realizada com sucesso.")
-
-    #***Função para ler o conteúdo do arquivo Excel***
-#   A função lê o conteúdo do arquivo e em seguida adiciona os dados na "tw_estoque".
-#   "pasta_de_trabalho = openpyxl.load_workbook(file_path)" Inicialmente, abre o arquivo que está localizado no caminho especificado em "file_path" e em seguida carrega o conteúdo no objeto que chamamos de "pasta_de_trabalho".
-#   Depois é selecionada a planilha ativa no arquivo. Geralmente a primeira planilha é a planilha selecionada.
-#   "folha.max_row" e "folha.max_column" retornam o número total de linhas e colunas, respectivamente, presentes na planilha.
-#   No primeiro for, entramos em um loop que percorre cada linha da planilha. Ela inicía a partir da segunda, para poder pular os cabeçalhos (por exemplo, no nosso arquivo a primeira linha são as categorias de separação) e vai até a quantidade de linhas mais um (linhas + 1). Já "item = QTreeWidgetItem()" cria um novo item que é adicionado na "QTreeWidget" (em "tw_estoque").
-#   Dentro do primeiro for, temos o segundo. Nesse segundo for, para cada linha percorrida ele entra no loop para percorre cada coluna.
-#   Assim, "valor_da_celula = folha.cell(row=linha, column=coluna).value" é referente ao valor da posição atual da celula.
-#   "item.setText(coluna - 1, str(valor_celula))" é usado para definir o texto para uma coluna específica de "QTreeWidgetItem". Nos parâmentros, temos que "coluna - 1" é para ajustar o índice, pois no Excel a contagem do índice das colunas começa com 1, já na "QTreeWidgetItem" começa em 0.
-#   Já o segundo parâmentro, temos a conversão do valor da célula para uma string, pois o método "setText" espera que retornemos um argumento do tipo string.
-#   Por fim, ao preencher o item com todos os valores de uma linha, então o item é adicionado ao "tw_estoque". Isso se repete até percorrer todas as linhas da planilha.
-
-    def read_excel(self, file_path):
-        pasta_de_trabalho = openpyxl.load_workbook(file_path)
-        folha = pasta_de_trabalho.active
-
-        linhas = folha.max_row
-        colunas = folha.max_column
-
-        for linha in range(2, linhas + 1):
-            item = QTreeWidgetItem()
-
-            for coluna in range(1, colunas + 1):
-                valor_celula = folha.cell(row=linha, column=coluna).value
-                item.setText(coluna - 1, str(valor_celula))
-            self.tw_estoque.addTopLevelItem(item)
+    def update_excel(self):
+        update_excel(self)
 
 if __name__ == "__main__":
-    # Configurar o nível de registro para DEBUG
-    logging.basicConfig(level=logging.DEBUG)
-
     app = QApplication(sys.argv)
     window = MainWindow()
     window.show()
