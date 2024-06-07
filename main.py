@@ -1,16 +1,18 @@
+#Classes do Qt para a criação de interface gráfica e interação com o usuário.
 from PySide2.QtWidgets import QApplication, QMainWindow, QFileDialog, QInputDialog, QMessageBox, QTreeWidgetItem
+#Funções que são importadas de excel.py , onde nelas temos as operações que estão relacionadas ao Excel.
 from excel import open_file_dialog, import_excel, gerar_excel_estoque_manual, read_excel, update_excel
 from utilitarios import enviar_email, mostrar_grafico, credenciais_email, codigo_existente, nome_existente
+#O Qt Designer gerou a classe Ui_MainWindow para definir a interface gráfica principal do aplicativo.
 from ui_main import Ui_MainWindow
+#O Qt oferece classes e módulos para que possamos lidar com as cores e outras coisas que envolvam a interface gráfica.
 from PySide2.QtGui import QColor
 from PySide2.QtCore import Qt
+#Biblioteca que utilizamos na criação de gráficos
 import matplotlib.pyplot as plt
-import email.message
+#Módulos e bibliotecas para a manipulação de dados, datas e horas e interação com o sistema.
 import pandas as pd
 import datetime
-import logging
-import smtplib
-import json
 import sys
 
 class MainWindow(QMainWindow, Ui_MainWindow):

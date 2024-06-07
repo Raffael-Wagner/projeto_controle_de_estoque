@@ -11,7 +11,7 @@ import pandas as pd
 #   "if fileName:" é a verificação se "fileName" não está vazio, isto é, se o usuário de fato selecionou um arquivo. Caso isso ocorra, o caminho completo do arquivo é definido como o texto do widget "txt_file"(nome definido no Qt Designer). Dessa maneira, no "QLineEdit" teremos a exibição do caminho do arquivo.
 def open_file_dialog(main_window):
     options = QFileDialog.Options()
-    fileName, _ = QFileDialog.getOpenFileName(main_window, "Abrir Arquivo Excel", "", "Excel Files (*.xlsx);; All Files (*)", options=options)
+    fileName, _ = QFileDialog.getOpenFileName(main_window, "Abrir Arquivo Excel", "", "Excel Files (*.xlsx);", options=options)
     if fileName:
         main_window.txt_file.setText(fileName)  
 

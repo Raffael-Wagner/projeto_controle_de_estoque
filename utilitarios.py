@@ -42,8 +42,12 @@ def mostrar_grafico(saidas, filename='grafico.pdf'):
     produtos_ordenados = sorted(zip(nomes, saidas), key=lambda x: x[1], reverse=True)
 
     top_produtos = produtos_ordenados[:10]
-    nomes_top = [produto[0] for produto in top_produtos]
-    saidas_top = [produto[1] for produto in top_produtos]
+    nomes_top = []
+    saidas_top = []
+
+    for produto in top_produtos:
+        nomes_top.append(produto[0])
+        saidas_top.append(produto[1])
 
     fig, ax = plt.subplots(figsize=(12, 8))
     ax.bar(nomes_top, saidas_top, color='red')
