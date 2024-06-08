@@ -170,6 +170,21 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.update_excel()
 
     def update_item_from_estoque(self):
+        setores_fornecedores = {
+        '01': ("Limpeza", "milorrengaw@gmail.com"),
+        '02': ("Bebidas", "fornecedor2@gmail.com"),
+        '03': ("Hortifruti", "fornecedor3@gmail.com"),
+        '04': ("Condimentos", "fornecedor4@gmail.com"),
+        '05': ("Padaria", "fornecedor5@gmail.com"),
+        '06': ("Biscoitos", "fornecedor6@gmail.com"),
+        '07': ("Doces", "fornecedor7@gmail.com"),
+        '08': ("Açougue", "fornecedor8@gmail.com"),
+        '09': ("Congelados", "fornecedor9@gmail.com"),
+        '10': ("Frios", "fornecedor10@gmail.com"),
+        '11': ("Limpeza", "fornecedor11@gmail.com"),
+        '12': ("Higiene", "fornecedor12@gmail.com")
+        }
+
         nome, ok = QInputDialog.getText(self, "Atualizar Item", "Nome do produto para atualizar:")
         if ok:
             encontrar = False
@@ -179,25 +194,48 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     encontrar = True
                     codigo, ok = QInputDialog.getText(self, "Atualizar Item", "Código:", text=item.text(0))
                     if ok:
+                        if not codigo.isdigit() or len(codigo) < 2 or codigo[-2:] not in setores_fornecedores:
+                            QMessageBox.warning(self, "Código Inválido", "O código deve ser numérico, ter pelo menos dois dígitos, e os dois últimos dígitos devem estar associados a um setor válido.")
+                            return
                         validade, ok = QInputDialog.getText(self, "Atualizar Item", "Validade:", text=item.text(2))
                         if ok:
+                            try:
+                                validade_date = datetime.datetime.strptime(validade, '%d/%m/%Y')
+                                if validade_date <= datetime.datetime.now():
+                                    QMessageBox.warning(self, "Aviso", "Nosso sistema não aceita produtos vencidos.")
+                                    return
+                            except ValueError:
+                                QMessageBox.warning(self, "Aviso", "Informe uma data de validade válida no formato dd/mm/aaaa.")
+                                return
+                            
                             preco_custo, ok = QInputDialog.getText(self, "Atualizar Item", "Preço de Custo:", text=item.text(3))
+                            if not ok or float(preco_custo) <= 0:
+                                QMessageBox.warning(self, "Aviso", "Preço de Custo deve ser um número positivo.")
+                                return
+                            
+                            preco_venda, ok = QInputDialog.getText(self, "Atualizar Item", "Preço de Venda:", text=item.text(4))
+                            if not ok or float(preco_venda) <= 0:
+                                QMessageBox.warning(self, "Aviso", "Preço de Venda deve ser um número positivo.")
+                                return
+
+                            quantidade, ok = QInputDialog.getText(self, "Atualizar Item", "Quantidade:", text=item.text(5))
+                            if not ok or int(quantidade) <= 0:
+                                QMessageBox.warning(self, "Aviso", "Quantidade deve ser um número inteiro positivo.")
+                                return
+                            quantidade_min, ok = QInputDialog.getText(self, "Atualizar Item", "Quantidade Mínima:", text=item.text(6))
+                            if not ok or int(quantidade_min) <= 0:
+                                QMessageBox.warning(self, "Aviso", "Quantidade Mínima deve ser um número inteiro positivo.")
+                                return
+                            fornecedor, ok = QInputDialog.getText(self, "Atualizar Item", "Fornecedor:", text=item.text(7))
+                            
                             if ok:
-                                preco_venda, ok = QInputDialog.getText(self, "Atualizar Item", "Preço de Venda:", text=item.text(4))
-                                if ok:
-                                    quantidade, ok = QInputDialog.getText(self, "Atualizar Item", "Quantidade:", text=item.text(5))
-                                    if ok:
-                                        quantidade_min, ok = QInputDialog.getText(self, "Atualizar Item", "Quantidade Mínima:", text=item.text(6))
-                                        if ok:
-                                            fornecedor, ok = QInputDialog.getText(self, "Atualizar Item", "Fornecedor:", text=item.text(7))
-                                            if ok:
-                                                item.setText(0, codigo)
-                                                item.setText(2, validade)
-                                                item.setText(3, preco_custo)
-                                                item.setText(4, preco_venda)
-                                                item.setText(5, quantidade)
-                                                item.setText(6, quantidade_min)
-                                                item.setText(7, fornecedor)
+                                item.setText(0, codigo)
+                                item.setText(2, validade)
+                                item.setText(3, preco_custo)
+                                item.setText(4, preco_venda)
+                                item.setText(5, quantidade)
+                                item.setText(6, quantidade_min)
+                                item.setText(7, fornecedor)
                     break
             if not encontrar:
                 QMessageBox.warning(self, "Aviso", "Produto não encontrado no estoque.")
