@@ -277,6 +277,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
                         if nova_quantidade <= quantidade_min:
                             enviar_email(item.text(1), nova_quantidade, quantidade_min, fornecedor)
+                            
                         saida_item = QTreeWidgetItem()
                         saida_item.setText(0, nome.upper())
                         saida_item.setText(1, str(quantidade_saida))
