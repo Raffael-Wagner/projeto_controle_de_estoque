@@ -1,7 +1,6 @@
 import smtplib
 import email.message
 import json
-import datetime
 import matplotlib.pyplot as plt
 
 

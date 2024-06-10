@@ -50,20 +50,21 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def add_item_to_estoque(self):
         setores_fornecedores = {
-        '01': ("Limpeza", "milorrengaw@gmail.com"),
-        '02': ("Bebidas", "fornecedor2@gmail.com"),
-        '03': ("Hortifruti", "fornecedor3@gmail.com"),
-        '04': ("Condimentos", "fornecedor4@gmail.com"),
-        '05': ("Padaria", "fornecedor5@gmail.com"),
-        '06': ("Biscoitos", "fornecedor6@gmail.com"),
-        '07': ("Doces", "fornecedor7@gmail.com"),
-        '08': ("Açougue", "fornecedor8@gmail.com"),
-        '09': ("Congelados", "fornecedor9@gmail.com"),
-        '10': ("Frios", "fornecedor10@gmail.com"),
-        '11': ("Limpeza", "fornecedor11@gmail.com"),
-        '12': ("Higiene", "fornecedor12@gmail.com")
+        '01': ("Mercearia", "ruan.miguel@aluno.uepb.edu.br"),
+        '02': ("Bebidas", "raffaelwagner@gmail.com "),
+        '03': ("Hortifruti", "joaquim.l@aluno.uepb.edu.br"),
+        '04': ("Condimentos", "joaquim.l@aluno.uepb.edu.br"),
+        '05': ("Padaria", "raffael.siqueira@aluno.uepb.edu.br"),
+        '06': ("Biscoitos", "milorrengaw@gmail.com"),
+        '07': ("Doces", "milorrengaw@gmail.com "),
+        '08': ("Açougue", "laryssa.dantas@aluno.uepb.edu.br"),
+        '09': ("Congelados", "laryssa.dantas@aluno.uepb.edu.br"),
+        '10': ("Frios", "laryssa.dantas@aluno.uepb.edu.br"),
+        '11': ("Limpeza", "cruz.leticia@aluno.uepb.edu.br"),
+        '12': ("Higiene", "cruz.leticia@aluno.uepb.edu.br"),
+        '13': ("Brinquedos", "cruz.leticia@aluno.uepb.edu.br")
     }
-        codigo, ok = QInputDialog.getText(self, "Código", "O último digito é referente ao setor\n01 - Limpeza\n02 - Bebidas\n03 - Hortifruti\n04 - Condimentos\n05 - Padaria\n06 - Biscoitos\n07 - Doces\n08 - Açougue\n09 - Congelados\n10 - Frios\n11 - Limpeza\n12 - Higiene\nDigite o código do produto:\n")
+        codigo, ok = QInputDialog.getText(self, "Código", "O último digito é referente ao setor\n01 - Mercearia\n02 - Bebidas\n03 - Hortifruti\n04 - Condimentos\n05 - Padaria\n06 - Biscoitos\n07 - Doces\n08 - Açougue\n09 - Congelados\n10 - Frios\n11 - Limpeza\n12 - Higiene\n13 - Brinquedos\nDigite o código do produto:\n")
 
         if ok and codigo.isdigit():
             if len(codigo) < 2:
@@ -171,18 +172,19 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def update_item_from_estoque(self):
         setores_fornecedores = {
-        '01': ("Limpeza", "milorrengaw@gmail.com"),
-        '02': ("Bebidas", "fornecedor2@gmail.com"),
-        '03': ("Hortifruti", "fornecedor3@gmail.com"),
-        '04': ("Condimentos", "fornecedor4@gmail.com"),
-        '05': ("Padaria", "fornecedor5@gmail.com"),
-        '06': ("Biscoitos", "fornecedor6@gmail.com"),
-        '07': ("Doces", "fornecedor7@gmail.com"),
-        '08': ("Açougue", "fornecedor8@gmail.com"),
-        '09': ("Congelados", "fornecedor9@gmail.com"),
-        '10': ("Frios", "fornecedor10@gmail.com"),
-        '11': ("Limpeza", "fornecedor11@gmail.com"),
-        '12': ("Higiene", "fornecedor12@gmail.com")
+        '01': ("Mercearia", "ruan.miguel@aluno.uepb.edu.br"),
+        '02': ("Bebidas", "raffaelwagner@gmail.com "),
+        '03': ("Hortifruti", "joaquim.l@aluno.uepb.edu.br"),
+        '04': ("Condimentos", "joaquim.l@aluno.uepb.edu.br"),
+        '05': ("Padaria", "raffael.siqueira@aluno.uepb.edu.br"),
+        '06': ("Biscoitos", "milorrengaw@gmail.com"),
+        '07': ("Doces", "milorrengaw@gmail.com "),
+        '08': ("Açougue", "laryssa.dantas@aluno.uepb.edu.br"),
+        '09': ("Congelados", "laryssa.dantas@aluno.uepb.edu.br"),
+        '10': ("Frios", "laryssa.dantas@aluno.uepb.edu.br"),
+        '11': ("Limpeza", "cruz.leticia@aluno.uepb.edu.br"),
+        '12': ("Higiene", "cruz.leticia@aluno.uepb.edu.br"),
+        '13': ("Brinquedos", "cruz.leticia@aluno.uepb.edu.br")
         }
 
         nome, ok = QInputDialog.getText(self, "Atualizar Item", "Nome do produto para atualizar:")

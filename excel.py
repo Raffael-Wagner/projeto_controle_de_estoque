@@ -4,11 +4,6 @@ import openpyxl
 import pandas as pd
 
 #***Função para selecionar um arquivo
-#   Abre uma caixa de diálogo para que o usuário possa selecionar o arquivo que deseja importar.
-#   "options = QFileDialog.Options()"é criado um objeto do QFileDialog que reune as configurações da janela de diálogo, como por exemplo, pode-se colocar uma configuração que a caixa de diálogo tenha a aparência e as funções do Qt e não do sistema operacional.
-#   "QFileDialog.getOpenFileName" abre uma janela para que o usuário selecione o arquivo desejado. O "main_window" é a instância da classe atual e "Abrir Arquivo Exvel" é o título da janela aberta. Nas aspas "" temos o diretório inicial, mas por estar vazia significa que será o diretório padrão. "Excel Files (*.xlsx);; All Files (*)" se refere a definição dos arquivos que o usuário pode selecionar. E por fim, "options=options" aplica as configurações que foram definidas.
-#   Assim, a função nos retorna uma tupla, onde o primeiro elemento é o caminho completo do arquivo selecionado e o segundo elemento é um espaço reservado para uma variável que não utilizaremos.
-#   "if fileName:" é a verificação se "fileName" não está vazio, isto é, se o usuário de fato selecionou um arquivo. Caso isso ocorra, o caminho completo do arquivo é definido como o texto do widget "txt_file"(nome definido no Qt Designer). Dessa maneira, no "QLineEdit" teremos a exibição do caminho do arquivo.
 def open_file_dialog(main_window):
     options = QFileDialog.Options()
     fileName, _ = QFileDialog.getOpenFileName(main_window, "Abrir Arquivo Excel", "", "Excel Files (*.xlsx);", options=options)
@@ -16,7 +11,6 @@ def open_file_dialog(main_window):
         main_window.txt_file.setText(fileName)  
 
 #***Função para iniciar a importação do arquivo Excel***
-#   Inicialmente, obtemos o caminho do arquivo a partir de "main_window.txt_file.text()" um campo de texto. Caso o caminho não for vazio, então é chamada a função "read_excel" com o caminho do arquivo.
 def import_excel(main_window):
     file_path = main_window.txt_file.text()  
     if file_path:
